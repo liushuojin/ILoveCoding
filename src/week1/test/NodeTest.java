@@ -18,6 +18,7 @@ public class NodeTest {
 
 	@After
 	public void tearDown() throws Exception {
+		
 	}
 
 	@Test
@@ -27,7 +28,6 @@ public class NodeTest {
 		Node node = Node.init(values);		
 		
 		Assert.assertEquals("(2,3,5,8,10)", node.toString());
-		
 	}
 	@Test
 	public void testAdd(){
@@ -39,6 +39,7 @@ public class NodeTest {
 		Node node = node1.add(node2);
 		Assert.assertEquals("(4,6,10,16,20)", node.toString());
 	}
+	
 	@Test
 	public void testInsert(){
 		int[] values = new int[]{2,3,5,8,10};
