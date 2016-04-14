@@ -14,17 +14,19 @@ public final class Complex {
 		this.a = a;
 		this.b = b;
 	}
-	public static Complex valueOf(int a, int b){		
-		return null;
+	public static Complex valueOf(int a, int b){	
+		return new Complex(a, b);
 	}
 	public Complex add(Complex c){
-		return null;
+		return new Complex(a + c.a, b + c.b);
 	}
 	
 	public Complex subtract(Complex c){
-		return null;
+		return new Complex(a - c.a, b - c.b);
 	}
 	public String toString(){
-		return null;
+		StringBuilder builder = new StringBuilder();
+		builder.append(a).append('+').append(b).append('i');
+		return builder.toString();
 	}
 }
