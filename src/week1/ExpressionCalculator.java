@@ -2,6 +2,10 @@ package week1;
 
 import java.util.Stack;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 /**
  * 给定一个表达式字符串， 计算这个字符串的值， 例如(1+ ((2+3)*(4*5))) , 应该返回 101 提示， 用两个堆栈实现， 一个是操作数堆栈，
  * 另外一个是操作符堆栈 对给定的字符串， 按下面4种情况从左到右逐个将这些实体送入栈处理 1. 将操作数压入操作数栈 2. 将运算符压入运算符栈 3.
@@ -11,10 +15,42 @@ import java.util.Stack;
  * 
  */
 public class ExpressionCalculator {
+	// 合法字符：+-*/ 0-9 ( )
 	private static String opsString = "+-*/";
-	//private static String valuesString = "0123456789."
+	private static String opType1 = "+-";
+	private static String opType2 = "*/";
+	private static String valuesString = "0123456789";
+	private static String left = "(";
+	private static String right = ")";
+
+	private int opCompare(String op1, String op2) {
+		if (opType1.contains(op1) && opType1.contains(op2)
+				|| opType2.contains(op1) && opType2.contains(op2))
+			return 0;
+		if (opType1.contains(op1) && opType2.contains(op2))
+			return -1;
+		if (opType2.contains(op1) && opType1.contains(op2))
+			return 1;
+		return 0;
+	}
+
+	private double calc(double num1, double num2, char op) {
+		System.out.println(op);
+		switch (op) {
+		case '+':
+			return num1 + num2;
+		case '-':
+			return num1 - num2;
+		case '*':
+			return num1 * num2;
+		case '/':
+			return num1 / num2;
+		default:
+			return 0.0;
+		}
+	}
 	
-	//还没通过
+	// 还没通过
 	public double evaluate(String expr) {
 		// 提示， 用两个堆栈实现， 一个是操作数堆栈， 另外一个是操作数堆栈
 
@@ -22,51 +58,41 @@ public class ExpressionCalculator {
 		Stack<String> ops = new Stack<String>();
 		// 操作数堆栈
 		Stack<String> values = new Stack<String>();
+		Double result = 0.0;
+		/*
+		 * ScriptEngineManager manager = new ScriptEngineManager(); ScriptEngine
+		 * engine = manager.getEngineByName("js");
+		 * 
+		 * try { return Double.parseDouble(engine.eval(expr).toString()); }
+		 * catch (NumberFormatException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); } catch (ScriptException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } return 0.0;
+		 */
 
-		int result;
-		char op;
-		int num1;
-		int num2;
+		// 算术合法性判断
 
+		// 压栈处理
 		for (int i = 0; i < expr.length(); i++) {
-			StringBuilder builder = new StringBuilder();
-			String c = expr.substring(i, i + 1);
-			while (i < expr.length() && expr.charAt(i) >= 48 && expr.charAt(i) <= 57) {
-				builder.append(expr.charAt(i++));
-			}
-			if (builder.length() > 0)
-				values.push(builder.toString());
-			else if (opsString.contains(c)) {
-				ops.push(c);
-			}  else if (c.equals(")")) {
-				num1 = Integer.parseInt(values.pop());
-				num2 = Integer.parseInt(values.pop());
-				op = ops.pop().charAt(0);
-				switch (op) {
-				case '+':
-						num1 += num2;
-					break;
+			String s = expr.substring(i, i + 1);
+			if (valuesString.contains(s)) {
+				values.push(s);
+			} else if (opsString.contains(s)) {
 
-				case '-':
-						num1 -= num2;
-					break;
-
-				case '*':
-						num1 *= num2;
-					break;
-
-				case '/':
-						num1 /= num2;
-					break;
-
-				default:
-					break;
+				if (!ops.empty() && opCompare(ops.peek(), s) >= 0) {
+					Double num = calc(Double.parseDouble(values.pop()),
+							Double.parseDouble(values.pop()),
+							ops.pop().charAt(0));
+					values.push(num.toString());
 				}
-				
-				values.push(new StringBuilder(num1).toString());
+				ops.push(s);
 			}
 		}
-
-		return Integer.parseInt(values.pop());
+		while(!ops.isEmpty()){
+			result = calc(Double.parseDouble(values.pop()),
+					Double.parseDouble(values.pop()),
+					ops.pop().charAt(0));
+			values.push(result.toString());
+		}
+		return result;
 	}
 }
