@@ -23,8 +23,10 @@ public class ExpressionEvaluationTest {
 		
 		
 		Assert.assertEquals(7, calculator.evaluate("1+2*3" ), 0.01);
-		
+
 		Assert.assertEquals(36, calculator.evaluate("5*6+2*3" ), 0.01);		
+		//Assert.assertEquals(7, calculator.evaluate("4-7+5*2" ), 0.01);		
+		//Assert.assertEquals(9, calculator.evaluate("3*4-6/2" ), 0.01);		
 		Assert.assertEquals(101.0, calculator.evaluate("(1+(2+3)*(4*5))" ), 0.01);
 		
 		

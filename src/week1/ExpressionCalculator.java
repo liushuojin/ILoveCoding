@@ -49,7 +49,7 @@ public class ExpressionCalculator {
 			return 0.0;
 		}
 	}
-	
+
 	// 还没通过
 	public double evaluate(String expr) {
 		// 提示， 用两个堆栈实现， 一个是操作数堆栈， 另外一个是操作数堆栈
@@ -59,6 +59,7 @@ public class ExpressionCalculator {
 		// 操作数堆栈
 		Stack<String> values = new Stack<String>();
 		Double result = 0.0;
+		boolean inBracket = false;
 		/*
 		 * ScriptEngineManager manager = new ScriptEngineManager(); ScriptEngine
 		 * engine = manager.getEngineByName("js");
@@ -78,19 +79,25 @@ public class ExpressionCalculator {
 				values.push(s);
 			} else if (opsString.contains(s)) {
 
-				if (!ops.empty() && opCompare(ops.peek(), s) >= 0) {
+				if (!inBracket && !ops.empty() && opCompare(ops.peek(), s) >= 0) {
 					Double num = calc(Double.parseDouble(values.pop()),
 							Double.parseDouble(values.pop()),
 							ops.pop().charAt(0));
 					values.push(num.toString());
 				}
 				ops.push(s);
+			} else if ("(".equals(s)) {
+				inBracket = true;
+			} else if (")".equals(s)) {
+				Double num = calc(Double.parseDouble(values.pop()),
+						Double.parseDouble(values.pop()), ops.pop().charAt(0));
+				values.push(num.toString());
+				inBracket = false;
 			}
 		}
-		while(!ops.isEmpty()){
+		while (!ops.isEmpty()) {
 			result = calc(Double.parseDouble(values.pop()),
-					Double.parseDouble(values.pop()),
-					ops.pop().charAt(0));
+					Double.parseDouble(values.pop()), ops.pop().charAt(0));
 			values.push(result.toString());
 		}
 		return result;
