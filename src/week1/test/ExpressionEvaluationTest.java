@@ -21,7 +21,9 @@ public class ExpressionEvaluationTest {
 	public void testEvaluate() {
 		ExpressionCalculator calculator = new ExpressionCalculator();
 		
+		
 		Assert.assertEquals(7, calculator.evaluate("1+2*3" ), 0.01);
+		
 		Assert.assertEquals(36, calculator.evaluate("5*6+2*3" ), 0.01);		
 		Assert.assertEquals(101.0, calculator.evaluate("(1+(2+3)*(4*5))" ), 0.01);
 		
